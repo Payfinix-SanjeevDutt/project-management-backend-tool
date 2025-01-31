@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Welcome {{user_name}}</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+					Roboto, Helvetica, Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 30px auto;
+				padding: 20px;
+				background-color: #ffffff;
+				border: 1px solid black;
+			}
+
+			p {
+				font-size: 14px;
+				line-height: 1.6;
+				margin: 0 0 10px;
+			}
+			.points {
+				font-size: 14px;
+				line-height: 1.6;
+				margin: 0 0 10px;
+			}
+
+			.footer {
+				font-size: 10px;
+				margin-top: 30px;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<p>Hello {{user_name}},</p>
+			<p>
+				Your role in the project: {{project_name}} has been updated! 🎉
+				Here's what this means:
+			</p>
+			<p>New Role: {{role}}</p>
+			<p>Responsibilities:</p>
+			<ul class="points">
+				{% for item in responsibilities %}
+				<li>{{item}}</li>
+				{% endfor %}
+			</ul>
+			<p>Access Updates:</p>
+			<ul class="points">
+				{% for item in access %}
+				<li>{{item}}</li>
+				{% endfor %}
+			</ul>
+
+			<p>
+				If you have any questions about your new role or
+				responsibilities, feel free to reach out to the admin or check
+				the help section for guidance. Let’s make great progress
+				together! 🚀
+			</p>
+		</div>
+		<div class="footer">
+			<p>Project Management | Your Trusted Partner in Productivity</p>
+		</div>
+	</body>
+</html>

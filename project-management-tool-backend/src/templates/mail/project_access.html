@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Welcome {{user_name}}</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+					Roboto, Helvetica, Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 30px auto;
+				padding: 20px;
+				background-color: #ffffff;
+				border: 1px solid black;
+			}
+
+			p {
+				font-size: 14px;
+				line-height: 1.6;
+				margin: 0 0 10px;
+			}
+
+			.points {
+                font-size: 14px;
+				line-height: 1.6;
+				margin: 0 0 10px;
+            }
+
+			.footer {
+				font-size: 10px;
+				margin-top: 30px;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<p>Hello {{user_name}},</p>
+
+        {% if access=='GRANT' %}
+            <div>
+                <p>🎉 Access Granted:</p>
+                <p>You now have access to the project: {{project_name}}.</p>
+                <p>Explore tasks, contribute to milestones, and collaborate with your team! 🚀</p>
+                <p>What’s Next?</p>
+                <ul class="points">
+                    <li>Navigate to your project dashboard.</li>
+                    <li>Review assigned tasks and timelines.</li>
+                    <li>Start contributing right away!</li>
+                </ul>
+                <p>If you have any questions about project or responsibilities, feel free to reach out to the admin or check the help section for guidance.
+                    Let’s make great progress together! 🚀
+                </p>
+            </div>
+        {% else %}
+            <div>
+                <p>❌ Access Revoked:</p>
+                <p>You access to the project: {{project_name}} has been revoked.</p>
+                <p>What This Means:</p>
+                <ul class="points">
+                    <li>You will no longer be able access project details, tasks, attachments, sprints, etc..</li>
+                    <li>You will no longer be able to view, edit or delete project details.</li>
+                    <li>Contact the admin if you believe this was a mistake or require access again.</li>
+                </ul>
+                <p>If you have any questions about project access, feel free to reach out to the admin or check the help section for guidance.</p>
+            </div>
+        {% endif %}
+		<div class="footer">
+			<p>Project Management | Your Trusted Partner in Productivity</p>
+		</div>
+	</body>
+</html>

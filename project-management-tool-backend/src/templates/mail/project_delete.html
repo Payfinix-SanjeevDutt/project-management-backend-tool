@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Welcome {{user_name}}</title>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+					Roboto, Helvetica, Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+
+			.container {
+				max-width: 600px;
+				margin: 30px auto;
+				padding: 20px;
+				background-color: #ffffff;
+				border: 1px solid black;
+			}
+
+			p {
+				font-size: 14px;
+				line-height: 1.6;
+				margin: 0 0 10px;
+			}
+
+			.points {
+				font-size: 14px;
+				line-height: 1.6;
+				margin: 0 0 10px;
+			}
+
+			.footer {
+				font-size: 10px;
+				margin-top: 30px;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<p>Hello {{user_name}},</p>
+			<p>
+				We’re writing to inform you that the project {{project_name}}
+				has been deleted as of {{deleted_date}}.
+			</p>
+			<p>Details of Deletion:</p>
+			<ul class="points">
+				<li>Project Name: {{project_name}}</li>
+				<li>Deleted By: {{deleted_by}}</li>
+				<li>Reason for Deletion: {{reason}}</li>
+			</ul>
+
+			<p>What You Need to Know:</p>
+			<ul class="points">
+				<li>
+					All associated data, including tasks, files, and comments,
+					has been permanently removed.
+				</li>
+				<li>
+					If you require access to any project-related reports or
+					details, please contact Admin Name or Support Team before
+					specific deadline, if applicable.
+				</li>
+			</ul>
+
+			<p>
+				We appreciate your understanding and are here to assist if you
+				have any concerns or questions. Thank you for your collaboration
+				on this project!
+			</p>
+		</div>
+		<div class="footer">
+			<p>Project Management | Your Trusted Partner in Productivity</p>
+		</div>
+	</body>
+</html>

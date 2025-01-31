@@ -1,0 +1,10 @@
+class HtmlTemplates:
+    SRC = 'src/templates/mail'
+    VERIFY_OTP = f'{SRC}/verify_mail.html'
+    WELCOME_USER = f'{SRC}/welcome_user.html'
+    PROJECT_ACCESS = f'{SRC}/project_access.html'
+    PROJECT_ROLES = f'{SRC}/project_role.html'
+    PROJECT_INVITE = f'{SRC}/project_invitation.html' 
+    PROJECT_DELETE = f'{SRC}/project_delete.html'
+    ASSIGNEE_ASSIGNED=f'{SRC}/assignee_assigned.html' 
+    REPORTER_ASSIGNED=f'{SRC}/reporter_assigned.html'
