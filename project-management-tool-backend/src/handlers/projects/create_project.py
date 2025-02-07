@@ -12,46 +12,48 @@ class CreateProject:
 
     def get_defaults(self):
         default_values = {
-            'Estimation': {'Estimation method complexity point': {}, 'Project schedule': {}},
+            'Estimation': {'Estimation method complexity point- CMMI': {}, 'Project schedule- CMMI': {}},
             'Project Management': {
-                'CAR': {'Review Defects': {}, 'Test Defects': {}},
-                'MOM': {},
+                'CAR- CMMI': {'Review Defects- CMMI': {}, 'Test Defects- CMMI': {}},
+                'MOM- CMMI': {},
                 'Project Planning, Monitoring and Control': {},
-                'Reviews': {'Review Report': {}},
-                'Time Tracker': {},
-                'Senior management review report': {},
-                'Sign off': {},
-                'Closure report': {},
-                'formal evaluation form': {},
-                'Master PMP': {},
-                'Project Level PMP & tracking': {}
+                'Reviews- CMMI': {'Review Report- CMMI': {}},
+                'Time Tracker- CMMI': {},
+                'Senior management review report- CMMI': {},
+                'Sign off- CMMI': {},
+                'Closure report- CMMI': {},
+                'formal evaluation form- CMMI': {},
+                'Master PMP- CMMI': {},
+                'Project Level PMP & tracking- CMMI': {}
             },
             'Requirements': {
-                'Requirement Traceabality Matrix': {},
-                'Software Requirement Specification': {},
-                'Query Log': {},
-                'Technical Design Documentation': {},
-                'Design Screens': {},
-                'Design Sign-Off Payroll': {}
+                'Requirement Traceabality Matrix- CMMI': {},
+                'Software Requirement Specification- CMMI': {},
+                'Query Log- CMMI': {},
+                'Technical Design Documentation- CMMI': {},
+                'Design Screens- CMMI': {},
+                'Design Sign-Off - CMMI': {}
             },
             'Coding': {
-                'CG Payroll': {},
-                'Test Plan': {},
-                'Defects System Testing': {},
-                'Unit testing': {},
-                'System test cases': {},
-                'Unit test cases': {},
-                'Unit defects log': {}, 
-                'Validation report': {}
+                'Test Plan - CMMI': {},
+                'Defects System Testing- CMMI': {},
+                'Unit testing- CMMI': {},
+                'System test cases- CMMI': {},
+                'Unit test cases- CMMI': {},
+                'Unit defects log- CMMI': {},
+                'Validation report- CMMI': {}
             },
             'Testing': {
-                'Validation Test Case': {},
-                'Test Plan': {},
-                'Validation Log': {},
-                'Validation Report': {},
+                'Validation Test Case- CMMI': {},
+                'Test Plan- CMMI': {},
+                'Validation Log- CMMI': {},
+                'Validation Report- CMMI': {},
             },
             'Deployment': {
-                'Release Notes': {},
+                'Release Notes- CMMI': {},
+            },
+            'UAT': {
+                'Test Trials - CMMI': {},
             },
         }
 
@@ -123,7 +125,7 @@ class CreateProject:
             body = self.request.json
             print(body)
 
-            project_id = generate_unique_key() 
+            project_id = generate_unique_key()
 
             projects = self.create_project(project_id, body)
             default_creation = self.create_default_objects(project_id, body)

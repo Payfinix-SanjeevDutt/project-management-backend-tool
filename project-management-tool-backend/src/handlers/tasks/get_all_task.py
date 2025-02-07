@@ -19,8 +19,15 @@ class AllTaskHandler:
                     "message": "Stage ID is required",
                     "data": {}
                 }
-
-            print(f"Stage ID: {stage_id}")  
+            
+            project_id = request.args.get("project_id")
+            if not project_id:
+                return {
+                    "status": False,
+                    "error_code": 1,
+                    "message": "Project ID is required",
+                    "data": {}
+                }
 
             reporter_alias = aliased(Employee, name="reporter")
             assignee_alias = aliased(Employee, name="assignee")
@@ -38,7 +45,7 @@ class AllTaskHandler:
                 .select_from(Task)
                 .outerjoin(reporter_alias, Task.reporter_id == reporter_alias.employee_id)
                 .outerjoin(assignee_alias, Task.assignee_id == assignee_alias.employee_id)
-                .filter(Task.stage_id == stage_id)  
+                .filter(Task.stage_id == stage_id ,Stage.project_id == project_id)  
             )
             
             result = self.session.execute(query).all()
@@ -59,17 +66,17 @@ class AllTaskHandler:
                     "children": []
                 })
                 
-                if data['parent_id'] is None or data['parent_id'] == '':
+                if not data['parent_id']:  
                     tasks[data['task_id']] = data
-                    tasks[data['task_id']]['children'] = []
-                
                 else:
                     sub_tasks[data['task_id']] = data
-                    temp_tasks[data['parent_id']] = temp_tasks.get(data['parent_id'], [])
-                    temp_tasks[data['parent_id']].append(data['task_id'])
+                    if data['parent_id'] not in temp_tasks:
+                        temp_tasks[data['parent_id']] = set()
+                    temp_tasks[data['parent_id']].add(data['task_id'])
             
             for key, value in temp_tasks.items():
-                tasks[key]['children'] = value
+                if key in tasks:  
+                    tasks[key]['children'] = list(value)
 
             return {
                 "status": True,
@@ -94,13 +101,11 @@ class AllTaskHandler:
     def get_sprint_task(self, request):
         try:
             body = request.json
-            sprint_id = body['sprint_id']  # Ensure you are using the correct variable
+            sprint_id = body['sprint_id']
             
-            # Aliases for reporter and assignee to avoid confusion with Task table
             reporter_alias = aliased(Employee, name="reporter")
             assignee_alias = aliased(Employee, name="assignee")
 
-            # Query to fetch tasks by sprint_id, along with reporter and assignee details
             query = (
                 select(
                     Task,

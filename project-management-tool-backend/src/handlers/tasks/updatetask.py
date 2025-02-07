@@ -23,9 +23,10 @@ class TaskUpdateHandler:
 
     def update_task(self, request):
         try:
-            # Parse request body
             body = request.get_json() or {}
             task_id = body.get("task_id")
+            task_name = body.get("task_name")
+            description = body.get("description")
             stage_id = body.get("stage_id")
             status = body.get("status")
             assignee_id = body.get("assignee_id")
@@ -36,7 +37,6 @@ class TaskUpdateHandler:
             actual_start_date = body.get("actual_start_date")
             actual_end_date = body.get("actual_end_date")
 
-            # Validate required fields
             if not task_id or not stage_id:
                 return jsonify({
                     "status": False,
@@ -45,7 +45,6 @@ class TaskUpdateHandler:
                     "data": {}
                 }), 400
 
-            # Check if task exists
             stmt = select(Task).where(Task.task_id == task_id, Task.stage_id == stage_id)
             task = self.session.execute(stmt).scalar_one_or_none()
             if not task:
@@ -56,14 +55,18 @@ class TaskUpdateHandler:
                     "data": {}
                 }), 404
 
-            # Prepare the update data
             update_data = {}
 
             if status:
                 update_data["status"] = status
 
+            if task_name:
+                update_data["task_name"] = task_name
+
+            if description:
+                update_data["description"] = description
+
             if assignee_id:
-                # Validate assignee existence
                 assignee_exists = self.session.query(Employee).filter(Employee.employee_id == assignee_id).one_or_none()
                 if not assignee_exists:
                     return jsonify({
@@ -75,7 +78,6 @@ class TaskUpdateHandler:
                 update_data["assignee_id"] = assignee_id
 
             if reporter_id:
-                # Validate reporter existence
                 reporter_exists = self.session.query(Employee).filter(Employee.employee_id == reporter_id).one_or_none()
                 if not reporter_exists:
                     return jsonify({
@@ -89,7 +91,6 @@ class TaskUpdateHandler:
             if priority:
                 update_data["priority"] = priority
 
-            # Validate and add date fields
             if start_date:
                 validated_date = self.validate_date(start_date)
                 if validated_date:
@@ -138,7 +139,6 @@ class TaskUpdateHandler:
                         "data": {}
                     }), 400
 
-            # Check if there's anything to update
             if not update_data:
                 return jsonify({
                     "status": False,
@@ -147,7 +147,6 @@ class TaskUpdateHandler:
                     "data": {}
                 }), 400
 
-            # Execute the update
             stmt_update = (
                 update(Task)
                 .where(Task.task_id == task_id, Task.stage_id == stage_id)

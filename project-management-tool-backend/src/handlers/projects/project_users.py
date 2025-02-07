@@ -1,5 +1,5 @@
 from flask import request
-from sqlalchemy import select, join
+from sqlalchemy import select
 from sqlalchemy.orm import aliased
 from src.database import db
 from src.models import ProjectUsers, Employee
