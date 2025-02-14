@@ -1,5 +1,5 @@
 from sqlalchemy import func, case, Date
-from sqlalchemy.sql import and_
+from sqlalchemy.sql import distinct, and_
 from datetime import date
 from src.database import db
 from src.models import Employee, Task, TaskStatus, Project, Stage

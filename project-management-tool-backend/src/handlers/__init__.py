@@ -35,6 +35,7 @@ from .stages.delete_stage import StageDeleteHandler
 from .stages.update_stage import StageUpdateHandler
 from .stages.get_single_stage import StageSingleHandler
 from .stages.get_allstage import AllStageHandler
+from .stages.stage_employee_report import EmployeeStageReport
 
 
 # ------------------ tasks --------------------------

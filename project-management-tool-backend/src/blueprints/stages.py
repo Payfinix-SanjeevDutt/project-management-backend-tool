@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from src.handlers import StageCreateHandler,StageDeleteHandler,StageUpdateHandler,StageSingleHandler,AllStageHandler
+from src.handlers import StageCreateHandler,StageDeleteHandler,StageUpdateHandler,StageSingleHandler,AllStageHandler,EmployeeStageReport
 
 stage_blueprint = Blueprint("stage", __name__)
 
@@ -23,3 +23,7 @@ def stage_update():
 @stage_blueprint.route("/delete-stage", methods=['DELETE'])
 def stage_delete():
     return StageDeleteHandler().delete_stage(request=request)
+
+@stage_blueprint.route("/stage-employee-report", methods=['POST'])
+def stage_employeereport():
+    return EmployeeStageReport().get_stage_employee_report(request = request)
