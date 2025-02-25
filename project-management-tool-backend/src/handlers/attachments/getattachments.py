@@ -20,7 +20,6 @@ class GetAllAttachments:
             task_id = data.get('task_id')
             subtask_id = data.get('subtask_id')
 
-            print("body>>>", task_id)
             if not any([project_id, stage_id, task_id, subtask_id]):
                 return {
                     "status": False,

@@ -16,6 +16,7 @@ from .employee.details import EmployeeHandler
 from .employee.update import UpdateEmployee
 from .employee.delete import DeleteEmployee
 from .employee.securityemp import SecurityEmpoyee
+from .employee.employee_project_list import EmployeeProjectTaskHandler
 
 # ------------------- auth ----------------------
 from .auth.create_user import CreateEmployee
