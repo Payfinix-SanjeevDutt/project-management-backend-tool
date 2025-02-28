@@ -10,6 +10,7 @@ from .projects.mail_invite import SendInvite
 from .projects.delete_project import DeleteProject
 from .projects.project_employee_report import EmployeeProjectReport
 from .projects.delete_project_users import DeleteProjectUsers
+from .projects.project_stages_report import ProjectStagesReport
 
 # -------------- employee ----------------------
 from .employee.details import EmployeeHandler

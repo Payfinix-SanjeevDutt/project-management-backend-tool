@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 
 from src.handlers import ListProject, CreateProject, UpdateProject, DisplayProject, CreateEmployeeUser ,SendInvite,DeleteProject,EmployeeTaskReport
-from src.handlers import ListProjectUsers ,EmployeeProjectReport , DeleteProjectUsers
+from src.handlers import ListProjectUsers ,EmployeeProjectReport , DeleteProjectUsers, ProjectStagesReport
 
 project_Blueprint = Blueprint("project",__name__)
 
@@ -40,6 +40,10 @@ def send_invite_to_employee():
 @project_Blueprint.route("/project-employee-report", methods= ["GET"])
 def project_employee_report():
     return EmployeeProjectReport().get_employee_project_report()
+
+@project_Blueprint.route("/project-stages-report", methods= ["POST"])
+def project_stages_report():
+    return ProjectStagesReport().get_stage_employee_report(request)
 
 @project_Blueprint.route("/project-user-delete", methods = ["POST"])
 def project_employee_delete():
