@@ -10,32 +10,20 @@ class ProjectStagesReport:
 
     def get_stage_employee_report(self, request):
         try:
-            body = request.get_json()
-            project_ids = body.get("project_id", [])
+            # Fetch all projects and their stage count
+            project_query = db.session.query(
+                Project.project_id,
+                Project.name.label("project_name"),
+                func.count(Stage.stage_id).label("total_stages")
+            ).outerjoin(Stage, Project.project_id == Stage.project_id) \
+            .group_by(Project.project_id).all()
 
-            if not project_ids:
-                return {"message": "project_id is required"}, 400
+            if not project_query:
+                return {"message": "No projects found"}, 404
 
-            # Fetch project details along with stage count
-            project_data = (
-                db.session.query(
-                    Project.project_id,
-                    Project.name.label("project_name"),
-                    func.count(Stage.stage_id).label("total_stages")
-                )
-                .outerjoin(Stage, Project.project_id == Stage.project_id)
-                .filter(Project.project_id.in_(project_ids))
-                .group_by(Project.project_id)
-                .all()
-            )
-
-            if not project_data:
-                return {"message": "Projects not found"}, 404
-
-            # Collect all project-wise data
             projects_summary = []
 
-            for project in project_data:
+            for project in project_query:
                 # Aggregate task summary for each project
                 task_summary = (
                     db.session.query(
@@ -77,4 +65,6 @@ class ProjectStagesReport:
 
         except Exception as e:
             return {"message": f"Error: {e}"}, 500
+
+
 
