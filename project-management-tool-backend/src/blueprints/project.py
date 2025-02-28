@@ -41,7 +41,7 @@ def send_invite_to_employee():
 def project_employee_report():
     return EmployeeProjectReport().get_employee_project_report()
 
-@project_Blueprint.route("/project-stages-report", methods= ["POST"])
+@project_Blueprint.route("/project-stages-report", methods= ["GET"])
 def project_stages_report():
     return ProjectStagesReport().get_stage_employee_report(request)
 
