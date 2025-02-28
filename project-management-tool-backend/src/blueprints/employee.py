@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from src.handlers import EmployeeHandler, UpdateEmployee, DeleteEmployee, SecurityEmpoyee
+from src.handlers import EmployeeHandler, UpdateEmployee, DeleteEmployee, SecurityEmpoyee , EmployeeProjectTaskHandler
 
 employee_blueprint = Blueprint("employee",__name__)
 
@@ -20,4 +20,10 @@ def deleteEmployee():
 def secureEmployee():
     return SecurityEmpoyee(request=request).security()
 
+@employee_blueprint.route("/completed-overrun", methods=['POST'])
+def EmployeeProjectTask():
+    return EmployeeProjectTaskHandler(request=request).employeeProjectTaskList()
 
+@employee_blueprint.route("/inprogress-overrun", methods=['POST'])
+def EmployeeProjectTask2():
+    return EmployeeProjectTaskHandler(request=request).employeeProjectTaskInprogressList()
