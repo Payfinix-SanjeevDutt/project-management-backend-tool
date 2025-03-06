@@ -40,7 +40,6 @@ class SharepointFileManager:
         response = requests.post(
             url, headers=self.__generateHeaders(), json=payload)
 
-
         if not response.ok:
             raise Exception(f"unable to create folder {response.status_code}")
         if response.ok:
@@ -169,24 +168,19 @@ class SharepointFileManager:
             raise Exception(f"unable to delete file {response.status_code}")
     
 
-
     def download_file(self, file_path):
         if not file_path:
             return jsonify({'status': False, "message": "Missing file path"}), 400
 
         url = f"{SharePointApi.BASE_URL}{file_path}"
-
         try:
             response = requests.get(url, headers=self.__generateHeaders())
             response.raise_for_status()  # Raise exception for HTTP errors
 
             data = response.json()
             download_url = data.get('@microsoft.graph.downloadUrl')
-
             if not download_url:
                 return jsonify({'status': False, 'message': 'Download URL not found in response'}), 500
-
             return download_url
-
         except requests.exceptions.RequestException as e:
             return jsonify({'status': False, 'error': 'Unable to download the file', 'message': str(e)}), 500
