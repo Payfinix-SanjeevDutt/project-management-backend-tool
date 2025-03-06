@@ -96,7 +96,95 @@ class AllTaskHandler:
                 "message": f"Failed to retrieve tasks due to {e}",
                 "data": {}
             }
-        
+
+
+    # def get_all_tasks(self, request):
+    #     try:
+    #         stage_id = request.args.get("stage_id")
+    #         project_id = request.args.get("project_id")
+
+    #         if not stage_id or not project_id:
+    #             return {
+    #                 "status": False,
+    #                 "error_code": 1,
+    #                 "message": "Stage ID and Project ID are required",
+    #                 "data": {}
+    #             }
+
+    #         reporter_alias = aliased(Employee, name="reporter")
+    #         assignee_alias = aliased(Employee, name="assignee")
+
+    #         query = (
+    #             select(
+    #                 Task,
+    #                 reporter_alias.name.label("rname"),
+    #                 reporter_alias.avatar.label("ravatar"),
+    #                 reporter_alias.email.label("remail"),
+    #                 assignee_alias.name.label("aname"),
+    #                 assignee_alias.avatar.label("aavatar"),
+    #                 assignee_alias.email.label("aemail"),
+    #             )
+    #             .select_from(Task)
+    #             .outerjoin(reporter_alias, Task.reporter_id == reporter_alias.employee_id)
+    #             .outerjoin(assignee_alias, Task.assignee_id == assignee_alias.employee_id)
+    #             .filter(Task.stage_id == stage_id, Stage.project_id == project_id)
+    #         )
+
+    #         result = self.session.execute(query).all()
+
+    #         tasks = {}
+    #         sub_tasks = {}
+    #         parent_child_map = {}
+
+    #         for task, rname, ravatar, remail, aname, aavatar, aemail in result:
+    #             data = task.get_details()
+    #             data.update({
+    #                 "reporter_name": rname,
+    #                 "reporter_avatar": ravatar,
+    #                 "reporter_email": remail,
+    #                 "assignee_name": aname,
+    #                 "assignee_avatar": aavatar,
+    #                 "assignee_email": aemail,
+    #                 "children": []
+    #             })
+
+    #             if data['parent_id']: 
+    #                 sub_tasks[data['task_id']] = data
+    #                 parent_id = data['parent_id']
+                    
+    #                 if parent_id not in parent_child_map:
+    #                     parent_child_map[parent_id] = []
+    #                 parent_child_map[parent_id].append(data)
+
+    #             else:  
+    #                 tasks[data['task_id']] = data
+
+    #         for parent_id, children in parent_child_map.items():
+    #             if all(child["status"] == "Done" for child in children):
+    #                 parent_task = self.session.query(Task).filter(Task.task_id == parent_id).first()
+    #                 if parent_task and parent_task.status != "Done":
+    #                     parent_task.status = "Done"
+    #                     self.session.commit()
+
+    #         return {
+    #             "status": True,
+    #             "error_code": 0,
+    #             "message": "Success",
+    #             "data": {
+    #                 "tasks": tasks,
+    #                 "sub_tasks": sub_tasks
+    #             }
+    #         }
+
+    #     except Exception as e:
+    #         self.session.rollback()  
+    #         return {
+    #             "status": False,
+    #             "error_code": 1,
+    #             "message": f"Failed to retrieve tasks due to {e}",
+    #             "data": {}
+    #         }
+
 
     def get_sprint_task(self, request):
         try:
