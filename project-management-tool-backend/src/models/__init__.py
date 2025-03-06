@@ -8,3 +8,4 @@ from .sprint import Sprint
 from .attachment import Attachment
 from .comments import Comments
 from .history import History
+from .timesheet import Timesheet
