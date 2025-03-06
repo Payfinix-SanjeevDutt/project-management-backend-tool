@@ -32,7 +32,17 @@ class ProjectStagesReport:
                         func.count(Task.task_id).label("total_tasks"),
                         func.sum(case((Task.status == TaskStatus.DONE, 1), else_=0)).label("completed_tasks"),
                         func.sum(case((Task.status == TaskStatus.IN_PROGRESS, 1), else_=0)).label("inprogress_tasks"),
-                        func.sum(case((Task.status == TaskStatus.TODO, 1), else_=0)).label("pending_tasks"),
+                        func.sum(
+                            case(
+                                (
+                                    and_(
+                                        Task.status != TaskStatus.TODO,
+                                        Task.assignee_id.is_(None)
+                                    ), 1
+                                ),
+                                else_=0,
+                            )
+                        ).label("delayed_tasks"),
                         func.sum(
                             case(
                                 (and_(Task.status == TaskStatus.DONE, Task.actual_end_date > Task.end_date), 1),
@@ -59,7 +69,7 @@ class ProjectStagesReport:
                     "total_tasks": task_summary.total_tasks or 0,
                     "completed_tasks": task_summary.completed_tasks or 0,
                     "inprogress_tasks": task_summary.inprogress_tasks or 0,
-                    "pending_tasks": task_summary.pending_tasks or 0,
+                    "delayed_tasks": task_summary.delayed_tasks or 0,
                     "completed_overrun": task_summary.completed_overrun or 0,
                     "inprogress_overrun": task_summary.inprogress_overrun or 0,
                 })
