@@ -1,4 +1,4 @@
-#!D:\Sujanix\PMP_Backend_dev\venv\Scripts\python.exe
+#!D:\Sujanix\project-management-backend-tool\venv\Scripts\python.exe
 
 import argparse
 import json
