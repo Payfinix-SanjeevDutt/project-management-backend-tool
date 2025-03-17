@@ -1,8 +1,9 @@
 from sqlalchemy import func, case, Date
-from sqlalchemy.sql import distinct, and_
+from sqlalchemy.sql import distinct, and_, or_
 from datetime import date
 from src.database import db
 from src.models import Employee, Task, TaskStatus, Project, Stage, ProjectUsers
+
 
 class ProjectStagesReport:
     def __init__(self):
@@ -10,15 +11,15 @@ class ProjectStagesReport:
 
     def get_stage_employee_report(self, request):
         try:
-            # Fetch all projects, stage count, and number of employees per project
             project_query = db.session.query(
                 Project.project_id,
                 Project.name.label("project_name"),
-                func.count(Stage.stage_id).label("total_stages"),
-                func.count(distinct(ProjectUsers.employee_id)).label("number_employees")  # Count distinct employees per project
+                func.count(distinct(Stage.stage_id)).label("total_stages"),
+                func.count(distinct(ProjectUsers.employee_id)
+                           ).label("number_employees")
             ).outerjoin(Stage, Project.project_id == Stage.project_id) \
-            .outerjoin(ProjectUsers, Project.project_id == ProjectUsers.project_id) \
-            .group_by(Project.project_id).all()
+                .outerjoin(ProjectUsers, Project.project_id == ProjectUsers.project_id) \
+                .group_by(Project.project_id).all()
 
             if not project_query:
                 return {"message": "No projects found"}, 404
@@ -26,18 +27,26 @@ class ProjectStagesReport:
             projects_summary = []
 
             for project in project_query:
-                # Aggregate task summary for each project
                 task_summary = (
                     db.session.query(
-                        func.count(Task.task_id).label("total_tasks"),
-                        func.sum(case((Task.status == TaskStatus.DONE, 1), else_=0)).label("completed_tasks"),
-                        func.sum(case((Task.status == TaskStatus.IN_PROGRESS, 1), else_=0)).label("inprogress_tasks"),
+                        func.count(
+                            case(
+                               (or_(Task.assignee_id.isnot(None),
+                                Task.reporter_id.isnot(None)), Task.task_id),
+                                else_=None
+                            )
+                        ).label("total_tasks"),
+
+                        func.sum(case((Task.status == TaskStatus.DONE, 1), else_=0)).label(
+                            "completed_tasks"),
+                        func.sum(case((Task.status == TaskStatus.IN_PROGRESS, 1), else_=0)).label(
+                            "inprogress_tasks"),
                         func.sum(
                             case(
                                 (
                                     and_(
-                                        Task.status != TaskStatus.TODO,
-                                        Task.assignee_id.is_(None)
+                                        Task.status == TaskStatus.TODO,
+                                        Task.assignee_id.isnot(None)
                                     ), 1
                                 ),
                                 else_=0,
@@ -45,13 +54,15 @@ class ProjectStagesReport:
                         ).label("delayed_tasks"),
                         func.sum(
                             case(
-                                (and_(Task.status == TaskStatus.DONE, Task.actual_end_date > Task.end_date), 1),
+                                (and_(Task.status == TaskStatus.DONE,Task.assignee_id.isnot(None),
+                                 Task.actual_end_date > Task.end_date), 1),
                                 else_=0,
                             )
                         ).label("completed_overrun"),
                         func.sum(
                             case(
-                                (and_(Task.status == TaskStatus.IN_PROGRESS, func.current_date() > Task.end_date), 1),
+                                (and_(Task.status == TaskStatus.IN_PROGRESS, Task.assignee_id.isnot(None),
+                                 func.current_date() > Task.end_date), 1),
                                 else_=0,
                             )
                         ).label("inprogress_overrun"),
@@ -65,7 +76,7 @@ class ProjectStagesReport:
                     "project_id": project.project_id,
                     "project_name": project.project_name,
                     "total_stages": project.total_stages or 0,
-                    "number_employees": project.number_employees or 0,  # Add employee count
+                    "number_employees": project.number_employees or 0,
                     "total_tasks": task_summary.total_tasks or 0,
                     "completed_tasks": task_summary.completed_tasks or 0,
                     "inprogress_tasks": task_summary.inprogress_tasks or 0,
@@ -78,7 +89,3 @@ class ProjectStagesReport:
 
         except Exception as e:
             return {"message": f"Error: {e}"}, 500
-
-
-
-

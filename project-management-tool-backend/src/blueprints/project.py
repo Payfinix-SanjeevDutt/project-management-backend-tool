@@ -57,7 +57,9 @@ def project_task_overdue():
 def project_task_inprogress():
     return ProjectTaskReportStatusHandler(request=request).projectInProgressTasks()
 
-
+@project_Blueprint.route("project-task-todo", methods = ["POST"])
+def project_task_todo():
+    return ProjectTaskReportStatusHandler(request=request).projectToDoTasks()
 
 
 

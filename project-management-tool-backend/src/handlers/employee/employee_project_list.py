@@ -111,46 +111,49 @@ class EmployeeProjectTaskHandler:
 
             employee_name = employee.name
 
-            task_stmt = select(Task).where(
+            task_stmt = select(
+                Task,
+                Stage.name,
+                Project.name
+            ).outerjoin(
+                Stage, Task.stage_id == Stage.stage_id
+            ).outerjoin(
+                Project, Task.project_id == Project.project_id
+            ).where(
                 and_(
-                    Task.assignee_id == assignee_id, 
-                    Task.status == "IN_PROGRESS", 
-                    func.now() > Task.end_date
+                    Task.assignee_id == assignee_id,
+                    Task.status == "IN_PROGRESS",
+                    Task.end_date.isnot(None),
+                    Task.end_date <= func.now()
                 )
             )
-            task_stmt = select(
-                            Task,
-                            Stage.name,
-                            Project.name
-                        ).outerjoin(
-                            Stage, Task.stage_id == Stage.stage_id
-                        ).outerjoin(
-                            Project, Task.project_id == Project.project_id
-                        ).where(
-                            and_(
-                                Task.assignee_id == assignee_id,
-                                Task.status == "IN_PROGRESS",  
-                            )
-                        )
-
+            
             result = self.session.execute(task_stmt).all()
 
-            response = [{
-                "task_id": task.task_id,
-                "task_name": task.task_name,
-                "status": task.status,
-                "start_date": task.start_date.strftime('%Y-%m-%d') if task.start_date else None,
-                "end_date": task.end_date.strftime('%Y-%m-%d') if task.end_date else None,
-                "actual_start_date": task.actual_start_date.strftime('%Y-%m-%d') if task.actual_start_date else None,
-                "actual_end_date": task.actual_end_date.strftime('%Y-%m-%d') if task.actual_end_date else None,
-                "assignee_id": task.assignee_id,
-               "extra_days": (
-                    ((task.actual_end_date.date() if task.actual_end_date else current_date) - task.end_date.date()).days
-                    if task.end_date else None
-                ),
-               "stage_name": stage_name,
-                "project_name": project_name
-            } for task, stage_name, project_name in result]
+            response = []
+            for task, stage_name, project_name in result:
+                extra_days = (
+                    (current_date - task.end_date.date()).days
+                    if task.end_date and current_date >= task.end_date.date() 
+                    else None
+                )
+
+                if extra_days == 0:  
+                    continue  # Skip task if no extra days
+
+                response.append({
+                    "task_id": task.task_id,
+                    "task_name": task.task_name,
+                    "status": task.status,
+                    "start_date": task.start_date.strftime('%Y-%m-%d') if task.start_date else None,
+                    "end_date": task.end_date.strftime('%Y-%m-%d') if task.end_date else None,
+                    "actual_start_date": task.actual_start_date.strftime('%Y-%m-%d') if task.actual_start_date else None,
+                    "actual_end_date": task.actual_end_date.strftime('%Y-%m-%d') if task.actual_end_date else None,
+                    "assignee_id": task.assignee_id,
+                    "extra_days": extra_days,  
+                    "stage_name": stage_name,
+                    "project_name": project_name
+                })
 
             return jsonify({
                 "status": True,
@@ -167,7 +170,8 @@ class EmployeeProjectTaskHandler:
                 "data": [],
                 "message": f"Failed to fetch tasks: {e}"
             }), 500
-    
+
+
 
     def employeeProjectTaskToDoList(self):
         try:
@@ -197,34 +201,43 @@ class EmployeeProjectTaskHandler:
             employee_name = employee.name
 
             task_stmt = select(
-                            Task, Stage.name, Project.name
-                        ).join(
-                            Stage, Task.stage_id == Stage.stage_id
-                        ).join(
-                            Project, Stage.project_id == Project.project_id
-                        ).where(
-                            and_(
-                                Task.assignee_id == assignee_id,
-                                Task.status == "TODO",
-                            )
-                        )
+                Task, Stage.name, Project.name
+            ).join(
+                Stage, Task.stage_id == Stage.stage_id
+            ).join(
+                Project, Stage.project_id == Project.project_id
+            ).where(
+                and_(
+                    Task.assignee_id == assignee_id,
+                    Task.status == "TODO",
+                    Task.end_date.isnot(None)  
+                )
+            )
 
             result = self.session.execute(task_stmt).all()
 
-            response = [{
-                "task_id": task.task_id,
-                "task_name": task.task_name,
-                "status": task.status,
-                "start_date": task.start_date.strftime('%Y-%m-%d') if task.start_date else None,
-                "end_date": task.end_date.strftime('%Y-%m-%d') if task.end_date else None,
-                "assignee_id": task.assignee_id,
-                "extra_days": (
-                    0 if task.end_date and task.end_date.date() > current_date 
-                    else ((current_date - task.end_date.date()).days if task.end_date else None)
-                ),
-                "stage_name": stage_name,
-                "project_name": project_name
-            } for task, stage_name, project_name in result]
+            response = []
+            for task, stage_name, project_name in result:
+                extra_days = (
+                    (current_date - task.end_date.date()).days
+                    if task.end_date and current_date >= task.end_date.date() 
+                    else None
+                )
+
+                if extra_days == 0:  
+                    continue  
+
+                response.append({
+                    "task_id": task.task_id,
+                    "task_name": task.task_name,
+                    "status": task.status,
+                    "start_date": task.start_date.strftime('%Y-%m-%d') if task.start_date else None,
+                    "end_date": task.end_date.strftime('%Y-%m-%d') if task.end_date else None,
+                    "assignee_id": task.assignee_id,
+                    "extra_days": extra_days,  
+                    "stage_name": stage_name,
+                    "project_name": project_name
+                })
 
             return jsonify({
                 "status": True,
@@ -241,4 +254,5 @@ class EmployeeProjectTaskHandler:
                 "data": [],
                 "message": f"Failed to fetch tasks: {e}"
             }), 500
+
 
