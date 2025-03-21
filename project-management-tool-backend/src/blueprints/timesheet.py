@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from src.handlers import TimesheetList, CreateTimesheet
+from src.handlers import TimesheetList, CreateTimesheet , UpdateTimesheet ,SingleTimesheet ,DeleteTimesheet
 
 
 timesheet_blueprint = Blueprint("blueprint", __name__)
@@ -16,10 +16,14 @@ def create_timesheet():
     return CreateTimesheet().create(request=request)
 
 
-# @timesheet_blueprint.route("/delete" , methods = ['DELETE'])
-# def delete_timesheet():
-#     # return DeleteProject(request=request).delete()
+@timesheet_blueprint.route("/delete" , methods = ['POST'])
+def delete_timesheet():
+    return DeleteTimesheet().delete(request=request)
 
-# @timesheet_blueprint.route("/update", methods=['POST'])
-# def update_timesheet():
-#     # return UpdateProject(request=request).update()
+@timesheet_blueprint.route("/update", methods=['POST'])
+def update_timesheet():
+    return UpdateTimesheet().update(request=request)
+
+@timesheet_blueprint.route("/get-single-timesheet",methods = ['POST'])
+def get_single_timesheet():
+    return SingleTimesheet().get_single_timesheet(request=request)

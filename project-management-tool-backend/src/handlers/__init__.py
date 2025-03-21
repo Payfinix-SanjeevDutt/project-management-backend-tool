@@ -67,3 +67,6 @@ from .attachments.downloadattachmentfile import AttachmentDownloadHandler
 #------------------------timesheet------------------------
 from .timesheet.list_timesheet import TimesheetList
 from .timesheet.create_timesheet import CreateTimesheet
+from .timesheet.update_timesheet import UpdateTimesheet
+from .timesheet.single_timehseet import SingleTimesheet
+from .timesheet.delete_timesheet import DeleteTimesheet
