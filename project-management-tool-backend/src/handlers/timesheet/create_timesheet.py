@@ -16,7 +16,9 @@ class CreateTimesheet:
                 jobName=body['job_name'],
                 workItem=body['work_item'],
                 description=body['description'],
-                totalHours=body['total_hours']
+                totalHours=body['total_hours'],
+                startDate = body['startDate'],
+                billable_status = body['billable_status']
             )
 
             self.session.add(timesheet_object)
