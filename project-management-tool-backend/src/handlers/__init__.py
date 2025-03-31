@@ -39,6 +39,7 @@ from .stages.update_stage import StageUpdateHandler
 from .stages.get_single_stage import StageSingleHandler
 from .stages.get_allstage import AllStageHandler
 from .stages.stage_employee_report import EmployeeStageReport
+from .stages.stage_list_report_status import ProjectStageTaskReportHandler
 
 
 # ------------------ tasks --------------------------

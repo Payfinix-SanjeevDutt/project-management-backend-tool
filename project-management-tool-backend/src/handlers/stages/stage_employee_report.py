@@ -1,6 +1,6 @@
 from flask import request
 from sqlalchemy import func, case
-from sqlalchemy.sql import distinct, and_
+from sqlalchemy.sql import distinct, and_ ,or_
 from src.database import db
 from src.models import Task, TaskStatus, Stage
 
@@ -39,20 +39,39 @@ class EmployeeStageReport:
 
             stage_report = (
                 db.session.query(
+                    Stage.stage_id,
                     Stage.name,
-                    func.count(Task.task_id).label("total_tasks"),
-                    func.sum(case((Task.status == TaskStatus.DONE, 1), else_=0)).label("completed_tasks"),
-                    func.sum(case((Task.status == TaskStatus.IN_PROGRESS, 1), else_=0)).label("inprogress_tasks"),
-                    func.sum(case((Task.status == TaskStatus.TODO, 1), else_=0)).label("pending_tasks"),
+                    func.count(
+                            case(
+                               ((Task.assignee_id.isnot(None)), Task.task_id),
+                                else_=None
+                            )
+                        ).label("total_tasks"),
+
+                        func.sum(case((and_(Task.status == TaskStatus.DONE, Task.assignee_id.isnot(None)), 1), else_=0)).label(
+                            "completed_tasks"),
+                        func.sum(case((and_(Task.status == TaskStatus.IN_PROGRESS, Task.assignee_id.isnot(None)), 1), else_=0)).label(
+                            "inprogress_tasks"),
+                        func.sum(
+                            case(
+                                (
+                                    and_(
+                                        Task.status == TaskStatus.TODO,
+                                        Task.assignee_id.isnot(None)
+                                    ), 1 
+                                ),
+                                else_=0,
+                            )
+                        ).label("pending_tasks"),
                     func.sum(
                         case(
-                            (and_(Task.status == TaskStatus.DONE, Task.actual_end_date > Task.end_date), 1),
+                            (and_(Task.status == TaskStatus.DONE,  Task.assignee_id.isnot(None),Task.actual_end_date > Task.end_date), 1),
                             else_=0,
                         )
                     ).label("completed_overrun"),
                     func.sum(
                         case(
-                            (and_(Task.status == TaskStatus.IN_PROGRESS, func.current_date() > Task.end_date), 1),
+                            (and_(Task.status == TaskStatus.IN_PROGRESS, Task.assignee_id.isnot(None), func.current_date() > Task.end_date), 1),
                             else_=0,
                         )
                     ).label("inprogress_overrun"),
@@ -67,6 +86,7 @@ class EmployeeStageReport:
 
             return [
                 {
+                    "stage_id":row.stage_id,
                     "stage_name": row.name,
                     "num_unique_employees": row.num_unique_employees or 0, 
                     "total_tasks": row.total_tasks or 0,
