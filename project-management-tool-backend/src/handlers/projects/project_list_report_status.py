@@ -126,14 +126,15 @@ class ProjectTaskReportStatusHandler:
                 Stage.name, 
                 Project.name,
                 Employee.name  
-            ).outerjoin(
+            ).join(
                 Stage, Task.stage_id == Stage.stage_id
-            ).outerjoin(
+            ).join(
                 Project, Task.project_id == Project.project_id
             ).outerjoin(  
                 Employee, Task.assignee_id == Employee.employee_id
             ).where(
                 and_(
+                    Task.project_id == project_id,
                     Task.assignee_id.isnot(None),
                     Task.status == "IN_PROGRESS",
                     Task.end_date <= func.now()
@@ -231,6 +232,7 @@ class ProjectTaskReportStatusHandler:
                 Employee, Task.assignee_id == Employee.employee_id
             ).where(
                 and_(
+                    Task.project_id == project_id,
                     Task.assignee_id.isnot(None),
                     Task.status == "TODO",
                     Task.end_date.isnot(None)  
