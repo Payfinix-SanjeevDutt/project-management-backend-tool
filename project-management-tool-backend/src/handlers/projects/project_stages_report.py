@@ -31,15 +31,14 @@ class ProjectStagesReport:
                     db.session.query(
                         func.count(
                             case(
-                               (or_(Task.assignee_id.isnot(None),
-                                Task.reporter_id.isnot(None)), Task.task_id),
+                               ((Task.assignee_id.isnot(None)), Task.task_id),
                                 else_=None
                             )
                         ).label("total_tasks"),
 
-                        func.sum(case((Task.status == TaskStatus.DONE, 1), else_=0)).label(
+                        func.sum(case((and_(Task.status == TaskStatus.DONE, Task.assignee_id.isnot(None)), 1), else_=0)).label(
                             "completed_tasks"),
-                        func.sum(case((Task.status == TaskStatus.IN_PROGRESS, 1), else_=0)).label(
+                        func.sum(case((and_(Task.status == TaskStatus.IN_PROGRESS, Task.assignee_id.isnot(None)), 1), else_=0)).label(
                             "inprogress_tasks"),
                         func.sum(
                             case(

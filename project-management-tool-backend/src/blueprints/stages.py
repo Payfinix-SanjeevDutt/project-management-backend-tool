@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from src.handlers import StageCreateHandler,StageDeleteHandler,StageUpdateHandler,StageSingleHandler,AllStageHandler,EmployeeStageReport
+from src.handlers import StageCreateHandler,StageDeleteHandler,StageUpdateHandler,StageSingleHandler,AllStageHandler,EmployeeStageReport ,ProjectStageTaskReportHandler
 
 stage_blueprint = Blueprint("stage", __name__)
 
@@ -27,3 +27,15 @@ def stage_delete():
 @stage_blueprint.route("/stage-employee-report", methods=['POST'])
 def stage_employeereport():
     return EmployeeStageReport().get_stage_employee_report(request = request)
+
+@stage_blueprint.route("/stage-overdue", methods = ["POST"])
+def stage_overdue():
+    return ProjectStageTaskReportHandler(request = request).projectOverdueTasks()
+
+@stage_blueprint.route("/stage-inprogress", methods = ["POST"])
+def stage_inprogress():
+    return ProjectStageTaskReportHandler(request = request).projectInProgressTasks()
+
+@stage_blueprint.route("/stage-todo", methods = ["POST"])
+def stage_todo():
+    return ProjectStageTaskReportHandler(request = request).projectToDoTasks()

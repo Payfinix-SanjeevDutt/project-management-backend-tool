@@ -12,51 +12,51 @@ class CreateProject:
 
     def get_defaults(self):
         default_values = {
-            'Estimation': {'Estimation method complexity point- CMMI': {}, 'Project schedule- CMMI': {}},
+            'Estimation': {'CMMI':{'Estimation method complexity point': {}, 'Project schedule': {}}},
             'Project Management': {
-                'CAR- CMMI': {'Review Defects- CMMI': {}, 'Test Defects- CMMI': {}},
-                'MOM- CMMI': {},
+                'CMMI':{
+                'MOM': {},
                 'Project Planning, Monitoring and Control': {},
-                'Reviews- CMMI': {'Review Report- CMMI': {}},
-                'Time Tracker- CMMI': {},
-                'Senior management review report- CMMI': {},
-                'Sign off- CMMI': {},
-                'Closure report- CMMI': {},
-                'formal evaluation form- CMMI': {},
-                'Master PMP- CMMI': {},
-                'Project Level PMP & tracking- CMMI': {}
+                'Time Tracker': {},
+                'Senior management review report': {},
+                'Sign off': {},
+                'Closure report': {},
+                'formal evaluation form': {},
+                'Master PMP': {},
+                'Project Level PMP & tracking': {}},
+                'CAR-CMMI':{'Review Defects':{},'Test Defects':{}},
+                'Review Report-CMMI': {'Reviews': {}},
             },
             'Requirements': {
-                'Requirement Traceabality Matrix- CMMI': {},
-                'Software Requirement Specification- CMMI': {},
-                'Query Log- CMMI': {},
-                'Technical Design Documentation- CMMI': {},
-                'Design Screens- CMMI': {},
-                'Design Sign-Off - CMMI': {}
-            },
+                'CMMI':{'Requirement Traceabality Matrix': {},
+                'Software Requirement Specification': {},
+                'Query Log': {},
+                'Technical Design Documentation': {},
+                'Design Screens': {},
+                'Design Sign-Off': {}
+            }},
             'Coding': {
-                'Test Plan - CMMI': {},
-                'Defects System Testing- CMMI': {},
-                'Unit testing- CMMI': {},
-                'System test cases- CMMI': {},
-                'Unit test cases- CMMI': {},
-                'Unit defects log- CMMI': {},
-                'Validation report- CMMI': {}
-            },
+                'CMMI':{'Test Plan': {},
+                'Defects System Testing': {},
+                'Unit testing': {},
+                'System test cases': {},
+                'Unit test cases': {},
+                'Unit defects log': {},
+                'Validation report': {}
+            }},
             'Testing': {
-                'Validation Test Case- CMMI': {},
-                'Test Plan- CMMI': {},
-                'Validation Log- CMMI': {},
-                'Validation Report- CMMI': {},
-            },
+                'CMMI':{'Validation Test Case': {},
+                'Test Plan': {},
+                'Validation Log': {},
+                'Validation Report': {},
+            }},
             'Deployment': {
-                'Release Notes- CMMI': {},
+               'CMMI':{'Release Notes': {}},
             },
             'UAT': {
-                'Test Trials - CMMI': {},
+               'CMMI':{'Test Trials': {}},
             },
         }
-
         return default_values
 
     def create_default_objects(self, project_id, body):
