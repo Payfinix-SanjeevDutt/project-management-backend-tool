@@ -2,8 +2,7 @@ from flask import Blueprint, request
 from src.handlers import TimesheetList, CreateTimesheet , UpdateTimesheet ,SingleTimesheet ,DeleteTimesheet ,TimesheetListAll
 
 
-timesheet_blueprint = Blueprint("blueprint", __name__)
-
+timesheet_blueprint = Blueprint("timesheet", __name__)
 
 
 @timesheet_blueprint.route("/list", methods=["POST"])

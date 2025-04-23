@@ -72,3 +72,7 @@ from .timesheet.update_timesheet import UpdateTimesheet
 from .timesheet.single_timehseet import SingleTimesheet
 from .timesheet.delete_timesheet import DeleteTimesheet
 from .timesheet.listAll_timesheet import TimesheetListAll
+
+from .timelog.create import CreateTimeLog
+from .timelog.get import GetTimeLog
+from .timelog.update import UpdateTimeLog
