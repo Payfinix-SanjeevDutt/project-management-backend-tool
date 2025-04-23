@@ -9,3 +9,4 @@ from .attachment import Attachment
 from .comments import Comments
 from .history import History
 from .timesheet import Timesheet
+from .timelogs import TimeLog
