@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\Sujanix\PMP_Backend_dev\venv
+set VIRTUAL_ENV=D:\PMP\Backend 2\project-management-backend-tool\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
