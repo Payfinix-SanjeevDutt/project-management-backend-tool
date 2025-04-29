@@ -11,7 +11,7 @@
         "profile_name": "user1",
         "project_name": "project-managem",
         "runtime": "python3.10",
-        "include": ["markupsafe"],
+        "package_slim_handler": true,
         "s3_bucket": "zappa-pmt"
     }
 }
