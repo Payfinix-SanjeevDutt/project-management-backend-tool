@@ -13,6 +13,14 @@ class GetTimeLog:
             employee_id = body.get("employee_id")
 
             query = self.session.query(TimeLog)
+            if not employee_id:
+                return {
+                    "status": False,
+                    "error": 1,
+                    "message": "Missing employee_id in request",
+                    "data": []
+                }
+
 
             if employee_id:
                 query = query.filter(TimeLog.employee_id == employee_id)

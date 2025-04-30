@@ -1,8 +1,8 @@
-from sqlalchemy import func, case, Date
-from sqlalchemy.sql import distinct, and_
+from sqlalchemy import func, case, and_
 from datetime import date
 from src.database import db
 from src.models import Employee, Task, TaskStatus, Project, Stage
+
 
 class EmployeeProjectReport:
     def __init__(self):
@@ -33,17 +33,29 @@ class EmployeeProjectReport:
                             else_=0,
                         )
                     ).label('inprogress_overrun'),
-                    func.count(func.distinct(Project.project_id)).label('total_projects')  
+                    func.count(func.distinct(Project.project_id)).label('total_projects'),
+                    func.max(Task.end_date).label("latest_task_end_date")  # <-- added to calculate availability
                 )
                 .outerjoin(Task, Employee.employee_id == Task.assignee_id)
                 .outerjoin(Stage, Stage.stage_id == Task.stage_id)
                 .outerjoin(Project, Project.project_id == Stage.project_id)
-                .group_by(Employee.employee_id) 
+                .group_by(Employee.employee_id)
                 .order_by(Employee.name)
             ).all()
 
-            report = [
-                {
+            report = []
+            today = date.today()
+
+            for emp in task_counts:
+                if emp.latest_task_end_date:
+                    latest_date = emp.latest_task_end_date.date()  # convert datetime to date
+                    days_until_available = (latest_date - today).days
+                    available_in = f"{days_until_available} day(s)" if days_until_available > 0 else "Available"
+                else:
+                    available_in = "Available"
+
+
+                report.append({
                     "employee_id": emp.employee_id,
                     "name": emp.name,
                     "email": emp.email,
@@ -56,10 +68,9 @@ class EmployeeProjectReport:
                     "pending_tasks": emp.pending_tasks,
                     "completed_overrun": emp.completed_overrun,
                     "inprogress_overrun": emp.inprogress_overrun,
-                    "total_projects": emp.total_projects, 
-                }
-                for emp in task_counts
-            ]
+                    "total_projects": emp.total_projects,
+                    "available_in": available_in  # <-- include this in response
+                })
 
             return report
 
