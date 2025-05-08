@@ -17,7 +17,7 @@ def create_project():
 def delete_project():
     return DeleteProject(request=request).delete()
 
-@project_Blueprint.route("/update-project", methods=['POST'])
+@project_Blueprint.route("/update-project", methods=['POST']) 
 def update_projects():
     return UpdateProject(request=request).update()
 

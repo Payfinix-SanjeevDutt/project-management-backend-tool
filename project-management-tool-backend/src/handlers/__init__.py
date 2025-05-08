@@ -76,3 +76,5 @@ from .timesheet.listAll_timesheet import TimesheetListAll
 from .timelog.create import CreateTimeLog
 from .timelog.get import GetTimeLog
 from .timelog.update import UpdateTimeLog
+from .timelog.get_date import GetEmpDetailsByDate
+from .timelog.getmonthly import GetEmpDetailsByMonth

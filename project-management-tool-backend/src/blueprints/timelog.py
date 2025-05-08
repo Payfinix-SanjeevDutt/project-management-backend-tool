@@ -1,5 +1,5 @@
 from flask import Blueprint,request
-from src.handlers import CreateTimeLog , GetTimeLog ,UpdateTimeLog
+from src.handlers import CreateTimeLog , GetTimeLog ,UpdateTimeLog,GetEmpDetailsByMonth,GetEmpDetailsByDate
 
 timelog_blueprint = Blueprint("timelog",__name__)
 
@@ -15,3 +15,11 @@ def get_timelog():
 @timelog_blueprint.route("/update",methods = ["POST"])
 def update_timelog():
     return UpdateTimeLog().update(request=request)
+
+@timelog_blueprint.route("/getdaily",methods = ["POST"])
+def daily_timelog():
+    return GetEmpDetailsByDate().emp_details_date(request=request)
+
+@timelog_blueprint.route("/getmonthly",methods = ["POST"])
+def monthly_timelog():
+    return GetEmpDetailsByMonth().emp_details_month(request=request)
