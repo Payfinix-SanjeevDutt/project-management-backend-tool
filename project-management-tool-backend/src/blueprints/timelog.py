@@ -15,3 +15,7 @@ def get_timelog():
 @timelog_blueprint.route("/update",methods = ["POST"])
 def update_timelog():
     return UpdateTimeLog().update(request=request)
+
+@timelog_blueprint.route("/update-timelog",methods = ["POST"])
+def update_timelog2():
+    return UpdateTimeLog().update(request=request)
