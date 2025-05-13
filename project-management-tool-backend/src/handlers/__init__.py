@@ -78,3 +78,6 @@ from .timelog.get import GetTimeLog
 from .timelog.update import UpdateTimeLog
 from .timelog.get_date import GetEmpDetailsByDate
 from .timelog.getmonthly import GetEmpDetailsByMonth
+
+
+from .faceverification.face import FaceVerify

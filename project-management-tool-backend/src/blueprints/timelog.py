@@ -1,5 +1,5 @@
 from flask import Blueprint,request
-from src.handlers import CreateTimeLog , GetTimeLog ,UpdateTimeLog,GetEmpDetailsByMonth,GetEmpDetailsByDate
+from src.handlers import CreateTimeLog , GetTimeLog ,UpdateTimeLog,GetEmpDetailsByMonth,GetEmpDetailsByDate ,FaceVerify
 
 timelog_blueprint = Blueprint("timelog",__name__)
 
@@ -23,3 +23,9 @@ def daily_timelog():
 @timelog_blueprint.route("/getmonthly",methods = ["POST"])
 def monthly_timelog():
     return GetEmpDetailsByMonth().emp_details_month(request=request)
+
+
+@timelog_blueprint.route("/face-verify",methods = ["POST"])
+def face_verify():
+    fv = FaceVerify()
+    return fv.verify_face(request=request)
