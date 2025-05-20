@@ -49,7 +49,7 @@ class EmployeeProjectReport:
             for emp in task_counts:
                 if emp.latest_task_end_date:
                     latest_date = emp.latest_task_end_date.date()  # convert datetime to date
-                    days_until_available = (latest_date - today).days
+                    days_until_available = (latest_date - today).days +1
                     available_in = f"{days_until_available} day(s)" if days_until_available > 0 else "Available"
                 else:
                     available_in = "Available"
