@@ -8,3 +8,4 @@ class HtmlTemplates:
     PROJECT_DELETE = f'{SRC}/project_delete.html'
     ASSIGNEE_ASSIGNED=f'{SRC}/assignee_assigned.html' 
     REPORTER_ASSIGNED=f'{SRC}/reporter_assigned.html'
+    OTHERS_NOTIFIED=f'{SRC}/others_notified.html'

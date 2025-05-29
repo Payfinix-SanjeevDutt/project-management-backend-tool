@@ -23,7 +23,8 @@ class SendInvite:
             email = data.get("email")
             project_id = data.get("project_id")
             link = data.get("link")
-
+            all_emails = data.get("all_emails", [])
+            
             if not all([username, task_name, stage, email, project_id]):
                 return jsonify({"status": False, "message": "Missing required fields in the request"}), 400
 
@@ -42,6 +43,18 @@ class SendInvite:
 
             nsmo = NotificationServiceManager()
             nsmo.send(mail_event_assignee)
+            
+            other_emails = [e for e in all_emails if e and e != email]
+            if other_emails:
+                mail_event_others = Events.OTHERS_NOTIFIED(
+                    user_name=username,
+                    project_name=project_name,
+                    email=other_emails,
+                    stage=stage,
+                    task_name=task_name,
+                    link=link
+                )
+                nsmo.send(mail_event_others)
 
             return jsonify({
                 "status": True,
@@ -54,7 +67,6 @@ class SendInvite:
     def send_reporter_notification(self):
         try:
             data = self.request.json
-
             username = data.get("username")
             task_name = data.get("task_name")
             stage = data.get("stage")
