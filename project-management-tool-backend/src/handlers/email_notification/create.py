@@ -1,6 +1,5 @@
-from src.models import EmailNotification,Employee
+from src.models import EmailNotification, Employee, Project
 from src.database import db
-from sqlalchemy import select
 from flask import jsonify
 
 
@@ -12,8 +11,7 @@ class EmailNotificationHandler:
 
     def create_notification(self):
         try:
-            required_fields = ['employee_id', 'task_name', 'email', 'project_name']
-
+            required_fields = ['employee_id', 'task_name', 'email', 'project_id']
             missing = [field for field in required_fields if field not in self.body]
             if missing:
                 return jsonify({
@@ -22,19 +20,29 @@ class EmailNotificationHandler:
                     "message": f"Missing required fields: {', '.join(missing)}"
                 }), 400
 
+
             employee_id = self.body['employee_id']
             task_name = self.body['task_name']
             stage_name = self.body.get('stage_name') 
             email = self.body['email']
-            project_name = self.body['project_name']
+            project_id = self.body['project_id']
             link = self.body.get('link')
+
+
+            project = self.session.get(Project, project_id)
+            if not project:
+                return jsonify({
+                    "status": False,
+                    "error": 2,
+                    "message": f"Project not found for ID: {project_id}"
+                }), 404
 
             new_notification = EmailNotification(
                 employee_id=employee_id,
                 task_name=task_name,
                 stage_name=stage_name,
                 email=email,
-                project_name=project_name,
+                project_name=project.name,
                 link=link
             )
 
