@@ -81,3 +81,9 @@ from .timelog.getmonthly import GetEmpDetailsByMonth
 
 
 from .faceverification.face import FaceVerify
+
+
+#-------------------------email_notification-------------------------------
+from .email_notification.get import GetEmailNotification
+from .email_notification.create import EmailNotificationHandler
+from .email_notification.delete import DeleteEmailNotification
