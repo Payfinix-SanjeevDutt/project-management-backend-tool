@@ -44,7 +44,7 @@ class Task(db.Model):
         self.priority = status
 
     def change_status(self, status: TaskStatus):
-        self.status = status
+        self.status = statusE
 
     def get_details(self):
         return {
