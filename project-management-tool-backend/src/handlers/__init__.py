@@ -97,3 +97,10 @@ from .leaves.list import LeaveListHandler
 from .leaves.Createleavepolicy import Create_Policy
 from .leaves.leaveBalance import AssignLeave
 from .leaves.applyleave import ApplyLeave
+from .faceverification.face import FaceVerify
+
+
+#-------------------------email_notification-------------------------------
+from .email_notification.get import GetEmailNotification
+from .email_notification.create import EmailNotificationHandler
+from .email_notification.delete import DeleteEmailNotification

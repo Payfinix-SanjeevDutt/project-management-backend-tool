@@ -9,6 +9,7 @@ from .timesheet import timesheet_blueprint
 from .timelog import timelog_blueprint
 from .holiday import holiday_blueprint
 from .leave import leave_blueprint
+from .email_notification import email_notification_blueprint
 
 def register_blueprints(app):
     app.register_blueprint(auth_blueprint, url_prefix="/auth")  
@@ -22,3 +23,5 @@ def register_blueprints(app):
     app.register_blueprint(timelog_blueprint,url_prefix="/timelog")
     app.register_blueprint(holiday_blueprint, url_prefix="/holiday")
     app.register_blueprint(leave_blueprint,url_prefix="/leave")
+    app.register_blueprint(email_notification_blueprint,url_prefix="/email_notification")
+    
