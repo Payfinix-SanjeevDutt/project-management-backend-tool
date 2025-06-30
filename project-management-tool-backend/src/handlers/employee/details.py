@@ -22,6 +22,7 @@ class EmployeeHandler:
                 "mobile": emp.mobile,
                 "verification": emp.verification,
                 "employee_avatar": emp.avatar,
+                "role": emp.job_title,
                 "access_status": None,
                 "role": None,
             } for emp, in result]

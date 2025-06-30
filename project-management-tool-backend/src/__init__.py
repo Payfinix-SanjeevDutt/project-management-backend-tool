@@ -4,7 +4,7 @@ from flask_cors import CORS
 from .blueprints import register_blueprints
 from .config import initconfig
 from .database import initdb
-from .models import EmailNotification
+from .models import leavepolicy,leavebalance
 
 def create_app():
     app = Flask(__name__)

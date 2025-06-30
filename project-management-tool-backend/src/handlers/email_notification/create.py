@@ -23,6 +23,7 @@ class EmailNotificationHandler:
 
             employee_id = self.body['employee_id']
             task_name = self.body['task_name']
+            task_id = self.body['task_id']
             stage_name = self.body.get('stage_name') 
             email = self.body['email']
             project_id = self.body['project_id']
@@ -40,6 +41,7 @@ class EmailNotificationHandler:
             new_notification = EmailNotification(
                 employee_id=employee_id,
                 task_name=task_name,
+                task_id=task_id,
                 stage_name=stage_name,
                 email=email,
                 project_name=project.name,

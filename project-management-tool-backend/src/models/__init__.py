@@ -11,3 +11,7 @@ from .history import History
 from .timesheet import Timesheet
 from .timelogs import TimeLog
 from .email_notification import EmailNotification
+from .holidays import Holiday
+from .leave import Leave
+from .leavebalance import LeaveBalance
+from .leavepolicy import LeavePolicy

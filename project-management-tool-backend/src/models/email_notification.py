@@ -38,10 +38,10 @@ from src.database import db
 from src.utils import get_current_time, generate_unique_key
 from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-
+ 
 from src.models.employee import Employee  
 from src.models.task import Task  # ✅ New import
-
+ 
 class EmailNotification(db.Model):
     __tablename__ = "email_notifications"
 
@@ -57,7 +57,7 @@ class EmailNotification(db.Model):
 
     employee = relationship("Employee", backref="notifications")
     task = relationship("Task", backref="notifications")  # ✅ New relationship
-
+ 
     def get(self):
         return {
             "notification_id": self.notification_id,

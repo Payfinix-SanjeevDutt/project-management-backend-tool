@@ -78,8 +78,25 @@ from .timelog.get import GetTimeLog
 from .timelog.update import UpdateTimeLog
 from .timelog.get_date import GetEmpDetailsByDate
 from .timelog.getmonthly import GetEmpDetailsByMonth
+from .timelog.getsingleweekly import GetTimeLogWeekly
+
+from .faceverification.face import FaceVerify
 
 
+from .holiday.create import HolidayCreateHandler
+from .holiday.list import HolidayListHandler
+from .holiday.delete import HolidayDeleteHandler
+from .holiday.get import HolidayGetHandler
+from .holiday.update import HolidayUpdateHandler
+from .holiday.deleteAll import HolidayDeleteALLHandler
+
+
+from .leaves.create import CreateLeave
+from .leaves.delete import LeaveDeleteHandler
+from .leaves.list import LeaveListHandler
+from .leaves.Createleavepolicy import Create_Policy
+from .leaves.leaveBalance import AssignLeave
+from .leaves.applyleave import ApplyLeave
 from .faceverification.face import FaceVerify
 
 
