@@ -36,13 +36,13 @@ class GetEmailNotification:
                     "employee_name": employee.name if employee else None,
                     "employee_avatar": employee.avatar if employee else None,  # 👈 Add avatar here
                     "task_name": n.task_name,
+                    "task_id":n.task_id,
                     "stage_name": n.stage_name,
                     "email": n.email,
                     "project_name": n.project_name,
                     "link": n.link,
                     "created_time": n.created_time,
                 })
-
             return jsonify({
                 "status": True,
                 "error": 0,
