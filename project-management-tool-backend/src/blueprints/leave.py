@@ -13,12 +13,6 @@ def delete_leave():
     return LeaveDeleteHandler().delete(request=request)
 
 
-# @leave_blueprint.route("/list-leave", methods=["GET"])
-# def list_leave():
-#     return LeaveListHandler().list(request=request)
-
-#new leave
-
 @leave_blueprint.route("/create-policy", methods=["POST"])
 def createpolicy():
     return Create_Policy().create_policy(request=request)
@@ -34,3 +28,14 @@ def list_leave2():
 @leave_blueprint.route("/apply-leave", methods=["POST"])
 def applyLeave():
     return ApplyLeave().apply_leave(request=request)
+
+@leave_blueprint.route("/list-all-leave", methods=["GET"])
+def get_all_leaves():
+    limit = request.args.get('limit', 50)
+    offset = request.args.get('offset', 0)
+    handler = LeaveListHandler()
+    return handler.get_all_leaves(limit=int(limit), offset=int(offset))
+
+@leave_blueprint.route("/list-employee-leave", methods=["POST"])
+def list_employee_leave():
+    return LeaveListHandler().get_leaves_by_employee(request=request)
