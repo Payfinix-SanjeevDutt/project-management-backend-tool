@@ -24,7 +24,7 @@ class EmployeeHandler:
                 "employee_avatar": emp.avatar,
                 "role": emp.job_title,
                 "access_status": None,
-                "role": None,
+                # "role": None,
             } for emp, in result]
 
             return jsonify({

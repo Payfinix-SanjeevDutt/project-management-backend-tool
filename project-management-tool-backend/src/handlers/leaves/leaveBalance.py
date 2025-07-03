@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from src.models import LeaveBalance, LeavePolicy
-from src.models import Employee
+from src.models import Employee , Leave
 from src.database import db
 from sqlalchemy import select
 
@@ -38,25 +38,42 @@ class AssignLeave:
 
 
     def get_all_leave_balances(self):
-        balances = LeaveBalance.query.all()
-        if not balances:
-            return jsonify({"error": "No balances found"}), 404
+        try:
+            excluded_ids = ['ELKHGFJJKEHLKJG4102836', 'Nischal0001']
 
-        result = {}
-        for balance in balances:
-            emp_bal = result.setdefault(balance.employee_id, [])
-            # emp_name = select(Employee.name).outerjoin(Employee,balance.employee_id == Employee.employee_id),
-            employee = Employee.query.filter_by(employee_id=balance.employee_id).first()
-            emp_name = employee.name 
-            emp_avatar = employee.avatar
-            emp_bal.append({
-                "emp_name" : emp_name,
-                "emp_avatar" : emp_avatar,
-                "leave_type": balance.leave_type,
-                "balance": balance.balance
-            })
+            records = (
+                db.session.query(Employee, LeaveBalance)
+                .outerjoin(LeaveBalance, Employee.employee_id == LeaveBalance.employee_id)
+                .filter(~Employee.employee_id.in_(excluded_ids))
+                .all()
+            )
 
-        return jsonify(result), 200
+            result = {}
+
+            for employee, balance in records:
+                emp_bal = result.setdefault(employee.employee_id, [])
+
+                if balance:
+                    emp_bal.append({
+                        "emp_name": employee.name,
+                        "emp_avatar": employee.avatar,
+                        "leave_type": balance.leave_type,
+                        "balance": balance.balance
+                    })
+                else:
+                    # If no balance, still add a placeholder so frontend doesn't break
+                    emp_bal.append({
+                        "emp_name": employee.name,
+                        "emp_avatar": employee.avatar,
+                        "leave_type": None,
+                        "balance": 0
+                    })
+
+            return jsonify(result), 200
+
+        except Exception as e:
+            return jsonify({"error": f"Failed to fetch leave balances: {str(e)}"}), 500
+
 
     def get_leave_balance_post(self, request):
         data = request.json
@@ -72,4 +89,23 @@ class AssignLeave:
         return jsonify([
             {"leave_type": b.leave_type, "balance": b.balance}
             for b in balances
+        ]), 200
+
+    def get_leave_history(self):
+        employee_id = request.args.get("employee_id")
+        leave_type = request.args.get("leave_type")
+
+        if not employee_id or not leave_type:
+            return jsonify({"error": "employee_id and leave_type are required"}), 400
+
+        leaves = Leave.query.filter_by(employee_id=employee_id, leave_type=leave_type).order_by(Leave.start_date.desc()).all()
+
+        return jsonify([
+            {
+                "start_date": leave.start_date.strftime("%Y-%m-%d"),
+                "end_date": leave.end_date.strftime("%Y-%m-%d"),
+                "leave_type": leave.leave_type,
+                "reason": leave.reason
+            }
+            for leave in leaves
         ]), 200
