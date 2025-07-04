@@ -25,6 +25,10 @@ def assignleave():
 def list_leave2():
     return AssignLeave().get_all_leave_balances()
 
+@leave_blueprint.route("/leave-history", methods=["GET"])
+def list_leave3():
+    return AssignLeave().get_leave_history()
+
 @leave_blueprint.route("/apply-leave", methods=["POST"])
 def applyLeave():
     return ApplyLeave().apply_leave(request=request)
