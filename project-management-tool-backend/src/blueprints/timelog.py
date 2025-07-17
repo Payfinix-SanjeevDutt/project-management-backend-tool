@@ -23,7 +23,7 @@ def update_timelog():
 def daily_timelog():
     return GetEmpDetailsByDate().emp_details_date(request=request)
 
-@timelog_blueprint.route("/getmonthly",methods = ["POST"])
+@timelog_blueprint.route("/monthly",methods = ["POST"])
 def monthly_timelog():
     return GetEmpDetailsByMonth().emp_details_month(request=request)
 
