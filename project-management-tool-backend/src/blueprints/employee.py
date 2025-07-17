@@ -4,9 +4,22 @@ from src.handlers import EmployeeHandler, UpdateEmployee, DeleteEmployee, Securi
 
 employee_blueprint = Blueprint("employee",__name__)
 
-@employee_blueprint.route("/",methods=["GET"])
-def getEmployees():
-    return EmployeeHandler(request=request).getemployees()
+# @employee_blueprint.route("/",methods=["GET"])
+# def getEmployees():
+#     return EmployeeHandler(request=request).getemployees()
+
+
+@employee_blueprint.route("/", methods=["GET"])
+def get_all_employees():
+    handler = EmployeeHandler(request)
+    return handler.getemployees()
+
+@employee_blueprint.route("/<employee_id>", methods=["GET"])
+def get_employee_by_id(employee_id):
+    handler = EmployeeHandler(request)
+    return handler.get_employee_by_id(employee_id)
+
+
 
 @employee_blueprint.route("/update",methods=['POST'])
 def updateEmployee():
