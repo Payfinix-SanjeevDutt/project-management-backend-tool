@@ -11,6 +11,10 @@ def create_timelog():
 def get_timelog():
     return GetTimeLog().fetch(request=request)
 
+@timelog_blueprint.route("/emp_list",methods = ["POST"])
+def get_emp_timelog():
+    return GetEmpDetailsByDate().emp_log_by_id_and_date(request=request)
+
 @timelog_blueprint.route("/list/weekly",methods = ["POST"])
 def get_timelog_weekly():
     return GetTimeLogWeekly().fetchweekly(request=request)

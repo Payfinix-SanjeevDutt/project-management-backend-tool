@@ -82,3 +82,68 @@ class GetEmpDetailsByDate:
                 "message": f"Failed to fetch time logs: {e}",
                 "data": {}
             }
+    def emp_log_by_id_and_date(self, request):
+        try:
+            body = request.json
+            employee_id = body.get("employee_id")
+            date_str = body.get("date")
+
+            if not employee_id or not date_str:
+                return {
+                    "status": False,
+                    "error": 1,
+                    "message": "Missing 'employee_id' or 'date' in request.",
+                    "data": {}
+                }
+
+            specific_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+            # Fetch all logs for this employee on this date
+            logs = (
+                self.session.query(TimeLog)
+                .filter_by(employee_id=employee_id, date=specific_date)
+                .order_by(TimeLog.clock_in.asc())
+                .all()
+            )
+
+            if logs:
+                log_data_list = []
+                for log in logs:
+                    log_data_list.append({
+                        "log_id": log.log_id,
+                        "clock_in": log.clock_in.strftime('%H:%M:%S') if log.clock_in else None,
+                        "clock_out": log.clock_out.strftime('%H:%M:%S') if log.clock_out else None,
+                        "total_hours": log.total_hours.strftime('%H:%M:%S') if log.total_hours else None
+                    })
+
+                return {
+                    "status": True,
+                    "error": 0,
+                    "message": "Employee time logs fetched successfully.",
+                    "data": {
+                        "employee_id": employee_id,
+                        "date": str(specific_date),
+                        "log_count": len(logs),
+                        "logs": log_data_list
+                    }
+                }
+            else:
+                return {
+                    "status": True,
+                    "error": 0,
+                    "message": "No logs found for the given employee on this date.",
+                    "data": {
+                        "employee_id": employee_id,
+                        "date": str(specific_date),
+                        "log_count": 0,
+                        "logs": []
+                    }
+                }
+
+        except Exception as e:
+            return {
+                "status": False,
+                "error": 1,
+                "message": f"Failed to fetch logs: {e}",
+                "data": {}
+            }
